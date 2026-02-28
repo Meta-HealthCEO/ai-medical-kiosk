@@ -27,10 +27,10 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
   const progress = ((adjustedStep + 1) / steps.length) * 100;
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700 z-50">
-      <div className="max-w-6xl mx-auto px-6 py-4">
+    <div className="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700 z-50 safe-area-top">
+      <div className="max-w-6xl mx-auto px-3 py-3 sm:px-6 sm:py-4">
         {/* Progress Bar */}
-        <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden mb-3">
+        <div className="relative h-1.5 sm:h-2 bg-slate-700 rounded-full overflow-hidden mb-2 sm:mb-3">
           <div
             className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
@@ -39,8 +39,8 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
           </div>
         </div>
 
-        {/* Step Indicators */}
-        <div className="flex items-center justify-between">
+        {/* Step Indicators - Responsive */}
+        <div className="flex items-center justify-between gap-1 sm:gap-2">
           {steps.map((step, index) => {
             const isActive = index === adjustedStep;
             const isCompleted = index < adjustedStep;
@@ -53,7 +53,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mb-1 transition-all duration-300 ${
+                  className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold mb-0.5 sm:mb-1 transition-all duration-300 ${
                     isCompleted
                       ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/50'
                       : isActive
@@ -62,7 +62,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
                   }`}
                 >
                   {isCompleted ? (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
@@ -70,7 +70,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
                   )}
                 </div>
                 <span
-                  className={`text-[10px] md:text-xs font-medium text-center whitespace-nowrap transition-colors duration-300 ${
+                  className={`text-[8px] sm:text-[10px] md:text-xs font-medium text-center whitespace-nowrap transition-colors duration-300 hidden sm:block ${
                     isActive ? 'text-blue-400' : isCompleted ? 'text-emerald-400' : 'text-slate-500'
                   }`}
                 >

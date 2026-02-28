@@ -5,7 +5,7 @@ import WelcomeScreen from './components/WelcomeScreen';
 import POPIAScreen from './components/POPIAScreen';
 import RegistrationScreen from './components/RegistrationScreen';
 import MedicalHistoryWizard from './components/MedicalHistoryWizard';
-import ChatScreen from './components/ChatScreen';
+import VoiceAgentScreen from './components/VoiceAgentScreen';
 import VitalsScreen from './components/VitalsScreen';
 import BloodTestsScreen from './components/BloodTestsScreen';
 import DiagnosisScreen from './components/DiagnosisScreen';
@@ -21,7 +21,7 @@ function KioskContent() {
     <POPIAScreen key="popia" />,
     <RegistrationScreen key="registration" />,
     <MedicalHistoryWizard key="medical-history" />,
-    <ChatScreen key="chat" />,
+    <VoiceAgentScreen key="voice-agent" />,
     <VitalsScreen key="vitals" />,
     <BloodTestsScreen key="blood-tests" />,
     <DiagnosisScreen key="diagnosis" />,

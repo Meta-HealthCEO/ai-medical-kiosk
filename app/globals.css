@@ -23,11 +23,15 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -37,8 +41,63 @@ body {
   color: hsl(var(--foreground));
 }
 
+/* Mobile-first responsive design */
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+}
+
 @media (min-width: 1024px) {
   body {
-    overflow: hidden;
+    font-size: 18px;
   }
+}
+
+/* Touch-friendly minimum sizes */
+button, a, input, textarea, select {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Prevent text size adjustment on mobile */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Smooth scrolling on mobile */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Disable selection on touch to prevent accidental highlights */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* iOS safe area insets */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Prevent zoom on input focus (mobile) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select {
+  font-size: 16px !important;
 }
