@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, language } = await req.json();
+    const { messages, language, patientContext } = await req.json();
 
     // Use OpenAI or Claude API
     const apiKey = process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY;
@@ -14,6 +14,21 @@ export async function POST(req: NextRequest) {
       
       return NextResponse.json({ message: mockResponse });
     }
+
+    const systemPrompt = `You are Dr. AI, a compassionate and professional medical AI assistant in a kiosk setting. 
+
+${patientContext || ''}
+
+Your role:
+- Ask relevant follow-up questions about symptoms, duration, severity
+- Use the patient's medical history to ask informed questions
+- Be empathetic, clear, and professional
+- Keep responses concise and conversational (2-3 sentences max)
+- Do NOT diagnose or prescribe medication
+- Guide the patient through describing their symptoms thoroughly
+- When appropriate, suggest moving to vitals check and blood tests
+
+Remember: You're collecting information for a doctor, not replacing one.`;
 
     // Use OpenAI API if available
     if (process.env.OPENAI_API_KEY) {
@@ -28,9 +43,7 @@ export async function POST(req: NextRequest) {
           messages: [
             {
               role: 'system',
-              content: language === 'en'
-                ? 'You are Dr. AI, a compassionate and professional medical AI assistant in a kiosk setting. Ask relevant follow-up questions about symptoms, duration, severity, and medical history. Be empathetic and clear. Keep responses concise and conversational.'
-                : 'Jy is Dr. AI, \'n medelydende en professionele mediese KI-assistent in \'n kiosk omgewing. Vra relevante opvolg vrae oor simptome, duur, erns, en mediese geskiedenis. Wees empaties en duidelik. Hou antwoorde kortliks en gespreksgewys.',
+              content: systemPrompt,
             },
             ...messages,
           ],
@@ -55,9 +68,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           model: 'claude-3-5-sonnet-20241022',
           max_tokens: 300,
-          system: language === 'en'
-            ? 'You are Dr. AI, a compassionate and professional medical AI assistant in a kiosk setting. Ask relevant follow-up questions about symptoms, duration, severity, and medical history. Be empathetic and clear. Keep responses concise and conversational.'
-            : 'Jy is Dr. AI, \'n medelydende en professionele mediese KI-assistent in \'n kiosk omgewing. Vra relevante opvolg vrae oor simptome, duur, erns, en mediese geskiedenis. Wees empaties en duidelik. Hou antwoorde kortliks en gespreksgewys.',
+          system: systemPrompt,
           messages: messages.map((msg: any) => ({
             role: msg.role === 'assistant' ? 'assistant' : 'user',
             content: msg.content,
@@ -114,8 +125,8 @@ function generateMockResponse(userMessage: string, language: string): string {
   // Follow-up responses
   if (lowerMessage.includes('days') || lowerMessage.includes('week') || lowerMessage.includes('dae')) {
     return language === 'en'
-      ? "Thank you for that information. Are you currently taking any medications? Do you have any known allergies or chronic conditions I should be aware of?"
-      : "Dankie vir daardie inligting. Neem jy tans enige medikasie? Het jy enige bekende allergieë of chroniese toestande waarvan ek moet weet?";
+      ? "Thank you for that information. Are there any other symptoms you're experiencing? Any recent changes in appetite, sleep, or energy levels?"
+      : "Dankie vir daardie inligting. Is daar enige ander simptome wat jy ervaar? Enige onlangse veranderinge in eetlus, slaap, of energievlakke?";
   }
 
   // Default response

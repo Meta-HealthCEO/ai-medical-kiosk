@@ -2,23 +2,68 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useKiosk } from '../context/KioskContext';
+import { useTranslation, languageNames } from '../i18n/translations';
 
 export default function ChatScreen() {
-  const { state, addChatMessage, nextStep } = useKiosk();
+  const { state, addChatMessage, nextStep, updateActivity } = useKiosk();
+  const t = useTranslation(state.language);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
+  // Build patient context for AI
+  const buildPatientContext = () => {
+    const reg = state.registration;
+    const med = state.medicalHistory;
+    
+    const conditions = Object.entries(med.conditions)
+      .filter(([key, val]) => val === true)
+      .map(([key]) => key)
+      .join(', ');
+    
+    const familyHistory = Object.entries(med.familyHistory)
+      .filter(([key, val]) => val === true)
+      .map(([key]) => key)
+      .join(', ');
+
+    return `
+PATIENT INFORMATION:
+- Name: ${reg.fullName || 'Not provided'}
+- Age: ${reg.dateOfBirth ? new Date().getFullYear() - new Date(reg.dateOfBirth).getFullYear() : 'Not provided'}
+- Gender: ${reg.gender || 'Not provided'}
+- Language: ${languageNames[state.language]}
+
+MEDICAL HISTORY:
+- Existing Conditions: ${conditions || med.conditions.other || 'None reported'}
+- Current Medications: ${med.medicationsAllergies.noMedications ? 'None' : med.medicationsAllergies.currentMedications || 'Not provided'}
+- Drug Allergies: ${med.medicationsAllergies.noDrugAllergies ? 'None' : med.medicationsAllergies.drugAllergies || 'Not provided'}
+- Food Allergies: ${med.medicationsAllergies.noFoodAllergies ? 'None' : med.medicationsAllergies.foodAllergies || 'Not provided'}
+- Surgical History: ${med.surgicalHistory.noSurgeries ? 'None' : med.surgicalHistory.surgeries || 'Not provided'}
+- Family History: ${familyHistory || 'None reported'}
+- Smoking: ${med.lifestyle.smoking || 'Not provided'}
+- Alcohol: ${med.lifestyle.alcohol || 'Not provided'}
+- Exercise: ${med.lifestyle.exercise || 'Not provided'}
+
+INSTRUCTIONS:
+- Respond in ${languageNames[state.language]} language
+- Use the patient's medical history to ask informed questions
+- Be empathetic and professional
+- Ask follow-up questions about symptoms
+- Do not diagnose or prescribe medication
+- Recommend vitals check and blood tests when appropriate
+`.trim();
+  };
+
   useEffect(() => {
-    // Initial greeting from AI doctor
+    // Initial greeting from AI doctor with patient context
     if (state.chatHistory.length === 0) {
-      const greeting = state.language === 'en'
-        ? "Hello! I'm Dr. AI, your virtual medical assistant. What brings you in today? Please describe your symptoms or health concerns."
-        : "Hallo! Ek is Dr. AI, jou virtuele mediese assistent. Wat bring jou vandag in? Beskryf asseblief jou simptome of gesondheidsbekommernisse.";
+      const greetingKey = state.language === 'en' ? 
+        `Hello ${state.registration.fullName}! I'm Dr. AI, your virtual medical assistant. I've reviewed your medical history. What brings you in today? Please describe your symptoms or health concerns.` :
+        `Hallo ${state.registration.fullName}! Ek is Dr. AI, jou virtuele mediese assistent. Ek het jou mediese geskiedenis hersien. Wat bring jou vandag in? Beskryf asseblief jou simptome of gesondheidsbekommernisse.`;
       
-      addChatMessage({ role: 'assistant', content: greeting });
+      addChatMessage({ role: 'assistant', content: greetingKey });
     }
 
     // Initialize Web Speech API
@@ -27,7 +72,14 @@ export default function ChatScreen() {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = state.language === 'en' ? 'en-US' : 'af-ZA';
+      
+      // Map language codes to speech recognition codes
+      const langMap: Record<string, string> = {
+        en: 'en-US', af: 'af-ZA', zu: 'zu-ZA', xh: 'xh-ZA', 
+        st: 'st-ZA', tn: 'tn-ZA', nso: 'nso-ZA', ts: 'ts-ZA',
+        ss: 'ss-ZA', ve: 've-ZA', nr: 'nr-ZA'
+      };
+      recognitionRef.current.lang = langMap[state.language] || 'en-US';
 
       recognitionRef.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
@@ -56,6 +108,7 @@ export default function ChatScreen() {
     setInput('');
     addChatMessage({ role: 'user', content: userMessage });
     setIsLoading(true);
+    updateActivity();
 
     try {
       const response = await fetch('/api/chat', {
@@ -64,6 +117,7 @@ export default function ChatScreen() {
         body: JSON.stringify({
           messages: [...state.chatHistory, { role: 'user', content: userMessage }],
           language: state.language,
+          patientContext: buildPatientContext(),
         }),
       });
 
@@ -73,7 +127,10 @@ export default function ChatScreen() {
       // Text-to-speech for AI response
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(data.message);
-        utterance.lang = state.language === 'en' ? 'en-US' : 'af-ZA';
+        const langMap: Record<string, string> = {
+          en: 'en-US', af: 'af-ZA', zu: 'zu-ZA', xh: 'xh-ZA',
+        };
+        utterance.lang = langMap[state.language] || 'en-US';
         utterance.rate = 0.9;
         window.speechSynthesis.speak(utterance);
       }
@@ -81,9 +138,7 @@ export default function ChatScreen() {
       console.error('Chat error:', error);
       addChatMessage({
         role: 'assistant',
-        content: state.language === 'en'
-          ? 'I apologize, but I encountered an error. Please try again.'
-          : 'Ek vra om verskoning, maar ek het \'n fout teëgekom. Probeer asseblief weer.',
+        content: t.loading,
       });
     } finally {
       setIsLoading(false);
@@ -108,7 +163,7 @@ export default function ChatScreen() {
   };
 
   return (
-    <div className="flex flex-col h-screen pt-20 pb-20">
+    <div className="flex flex-col h-screen pt-20 pb-20" onMouseMove={updateActivity} onTouchStart={updateActivity}>
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {state.chatHistory.map((msg, idx) => (
           <div
@@ -182,7 +237,7 @@ export default function ChatScreen() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={state.language === 'en' ? 'Type your message...' : 'Tik jou boodskap...'}
+              placeholder={t.typeMessage}
               className="flex-1 px-6 py-4 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-lg"
               disabled={isLoading}
             />
@@ -204,7 +259,7 @@ export default function ChatScreen() {
               disabled={isLoading || !input.trim()}
               className="px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-emerald-500/50"
             >
-              {state.language === 'en' ? 'Send' : 'Stuur'}
+              {t.send}
             </button>
           </div>
           {state.chatHistory.length > 2 && (
@@ -212,7 +267,7 @@ export default function ChatScreen() {
               onClick={handleContinue}
               className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-blue-500/50"
             >
-              {state.language === 'en' ? 'Continue to Vitals Check →' : 'Gaan voort na Vitale Tekens →'}
+              {t.continue} →
             </button>
           )}
         </div>
