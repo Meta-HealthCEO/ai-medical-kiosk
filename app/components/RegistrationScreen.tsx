@@ -44,23 +44,23 @@ export default function RegistrationScreen() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 md:p-8 overflow-y-auto">
-      <div className="max-w-4xl w-full space-y-8 animate-slide-in py-8" onMouseMove={updateActivity} onTouchStart={updateActivity}>
+    <div className="flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8 overflow-y-auto">
+      <div className="max-w-4xl w-full space-y-4 sm:space-y-6 md:space-y-8 animate-slide-in py-4 sm:py-6 md:py-8" onMouseMove={updateActivity} onTouchStart={updateActivity}>
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50">
+            <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent px-2">
             {t.registrationTitle}
           </h1>
         </div>
 
         {/* Form */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-2xl shadow-emerald-500/20">
-          <div className="space-y-6">
+        <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-emerald-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl shadow-emerald-500/20">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6">
             {/* Full Name */}
             <div>
               <label className="block text-sm md:text-base font-semibold text-slate-200 mb-2">
@@ -70,7 +70,7 @@ export default function RegistrationScreen() {
                 type="text"
                 value={state.registration.fullName}
                 onChange={(e) => updateRegistration({ fullName: e.target.value })}
-                className={`w-full bg-slate-700/50 border-2 ${errors.fullName ? 'border-red-500' : 'border-slate-600'} rounded-xl px-4 md:px-6 py-4 md:py-5 text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
+                className={`w-full bg-slate-700/50 border-2 ${errors.fullName ? 'border-red-500' : 'border-slate-600'} rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
                 placeholder="John Doe"
               />
               {errors.fullName && <p className="text-red-400 text-sm mt-1">{errors.fullName}</p>}
@@ -85,7 +85,7 @@ export default function RegistrationScreen() {
                 type="text"
                 value={state.registration.idPassport}
                 onChange={(e) => updateRegistration({ idPassport: e.target.value })}
-                className={`w-full bg-slate-700/50 border-2 ${errors.idPassport ? 'border-red-500' : 'border-slate-600'} rounded-xl px-4 md:px-6 py-4 md:py-5 text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
+                className={`w-full bg-slate-700/50 border-2 ${errors.idPassport ? 'border-red-500' : 'border-slate-600'} rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
                 placeholder="1234567890123"
               />
               {errors.idPassport && <p className="text-red-400 text-sm mt-1">{errors.idPassport}</p>}
@@ -100,7 +100,7 @@ export default function RegistrationScreen() {
                 type="date"
                 value={state.registration.dateOfBirth}
                 onChange={(e) => updateRegistration({ dateOfBirth: e.target.value })}
-                className={`w-full bg-slate-700/50 border-2 ${errors.dateOfBirth ? 'border-red-500' : 'border-slate-600'} rounded-xl px-4 md:px-6 py-4 md:py-5 text-base md:text-lg text-white focus:outline-none focus:border-emerald-500 transition-colors`}
+                className={`w-full bg-slate-700/50 border-2 ${errors.dateOfBirth ? 'border-red-500' : 'border-slate-600'} rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg text-white focus:outline-none focus:border-emerald-500 transition-colors`}
               />
               {errors.dateOfBirth && <p className="text-red-400 text-sm mt-1">{errors.dateOfBirth}</p>}
             </div>
@@ -110,12 +110,12 @@ export default function RegistrationScreen() {
               <label className="block text-sm md:text-base font-semibold text-slate-200 mb-3">
                 {t.gender} *
               </label>
-              <div className="grid grid-cols-3 gap-3 md:gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
                 {(['male', 'female', 'other'] as const).map((gender) => (
                   <button
                     key={gender}
                     onClick={() => updateRegistration({ gender })}
-                    className={`py-4 md:py-5 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                    className={`py-3 sm:py-4 md:py-5 px-2 sm:px-4 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 text-xs sm:text-sm md:text-base ${
                       state.registration.gender === gender
                         ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
                         : 'bg-slate-700/50 text-slate-300 border-2 border-slate-600 hover:border-emerald-500'
@@ -137,7 +137,7 @@ export default function RegistrationScreen() {
                 type="tel"
                 value={state.registration.contactNumber}
                 onChange={(e) => updateRegistration({ contactNumber: e.target.value })}
-                className={`w-full bg-slate-700/50 border-2 ${errors.contactNumber ? 'border-red-500' : 'border-slate-600'} rounded-xl px-4 md:px-6 py-4 md:py-5 text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
+                className={`w-full bg-slate-700/50 border-2 ${errors.contactNumber ? 'border-red-500' : 'border-slate-600'} rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
                 placeholder="+27 12 345 6789"
               />
               {errors.contactNumber && <p className="text-red-400 text-sm mt-1">{errors.contactNumber}</p>}
@@ -152,7 +152,7 @@ export default function RegistrationScreen() {
                 type="email"
                 value={state.registration.emailAddress}
                 onChange={(e) => updateRegistration({ emailAddress: e.target.value })}
-                className={`w-full bg-slate-700/50 border-2 ${errors.emailAddress ? 'border-red-500' : 'border-slate-600'} rounded-xl px-4 md:px-6 py-4 md:py-5 text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
+                className={`w-full bg-slate-700/50 border-2 ${errors.emailAddress ? 'border-red-500' : 'border-slate-600'} rounded-lg sm:rounded-xl px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-sm sm:text-base md:text-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors`}
                 placeholder="john@example.com"
               />
               {errors.emailAddress && <p className="text-red-400 text-sm mt-1">{errors.emailAddress}</p>}
@@ -161,16 +161,16 @@ export default function RegistrationScreen() {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={prevStep}
-            className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold py-5 md:py-6 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-slate-600 active:scale-95"
+            className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold py-4 sm:py-5 md:py-6 px-6 sm:px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-slate-600 active:scale-95 text-sm sm:text-base"
           >
             {t.back}
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-5 md:py-6 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/30 active:scale-95"
+            className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 sm:py-5 md:py-6 px-6 sm:px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-emerald-500/30 active:scale-95 text-sm sm:text-base"
           >
             {t.continue}
           </button>

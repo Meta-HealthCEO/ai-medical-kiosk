@@ -36,16 +36,16 @@ export default function MedicalHistoryWizard() {
   ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 md:p-8 overflow-y-auto">
-      <div className="max-w-4xl w-full space-y-8 animate-slide-in py-8" onMouseMove={updateActivity} onTouchStart={updateActivity}>
+    <div className="flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8 overflow-y-auto">
+      <div className="max-w-4xl w-full space-y-4 sm:space-y-6 md:space-y-8 animate-slide-in py-4 sm:py-6 md:py-8" onMouseMove={updateActivity} onTouchStart={updateActivity}>
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50">
+            <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent px-2">
             {t.medicalHistoryTitle}
           </h1>
           <div className="flex items-center justify-center gap-2 mt-4">
@@ -68,21 +68,21 @@ export default function MedicalHistoryWizard() {
         </div>
 
         {/* Page Content */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/30 rounded-2xl p-6 md:p-8 shadow-2xl shadow-blue-500/20 min-h-[400px]">
+        <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-blue-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-2xl shadow-blue-500/20 min-h-[300px] sm:min-h-[400px]">
           {pages[currentPage]}
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={handleBack}
-            className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold py-5 md:py-6 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-slate-600 active:scale-95"
+            className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold py-4 sm:py-5 md:py-6 px-6 sm:px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-slate-600 active:scale-95 text-sm sm:text-base"
           >
             {t.previous}
           </button>
           <button
             onClick={handleNext}
-            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-5 md:py-6 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 active:scale-95"
+            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 sm:py-5 md:py-6 px-6 sm:px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 active:scale-95 text-sm sm:text-base"
           >
             {currentPage === totalSteps - 1 ? t.continue : t.next}
           </button>
