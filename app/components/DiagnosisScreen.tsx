@@ -207,7 +207,7 @@ export default function DiagnosisScreen() {
                 {state.language === 'en' ? 'Connect with Doctor' : 'Verbind met Dokter'}
               </button>
               <button
-                onClick={() => nextStep() && nextStep()}
+                onClick={() => { nextStep(); nextStep(); }}
                 className="px-8 py-6 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white text-xl rounded-xl font-semibold transition-all duration-300"
               >
                 {state.language === 'en' ? 'Skip to Payment' : 'Slaan oor na Betaling'}
